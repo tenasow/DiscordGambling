@@ -7,7 +7,6 @@ const prefix = `${process.env.PREFIX}`
 const client = new Client();
 
 client.on("ready", () => {
-    // Check if the table "points" exists.
     const table = sql.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'users';").get();
     if (!table['count(*)']) {
       // If the table isn't there, create it and setup the database correctly.
@@ -17,8 +16,7 @@ client.on("ready", () => {
       sql.pragma("synchronous = 1");
       sql.pragma("journal_mode = wal");
     }
-  
-    // And then we have two prepared statements to get and set the score data.
+
     client.getCash = sql.prepare("SELECT cash FROM users WHERE user = ? AND guild = ?");
     client.setCash = sql.prepare("INSERT OR REPLACE INTO users (id, user, guild, cash) VALUES (@id, @user, @guild, @cash);");
 });
